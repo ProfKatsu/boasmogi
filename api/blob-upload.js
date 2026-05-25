@@ -20,7 +20,7 @@ export default async function handler(request, response) {
             'video/mpeg',
             'video/quicktime'
           ],
-          maximumSizeInBytes: 25 * 1024 * 1024, // Limite rígido de 25 Megabytes
+          maximumSizeInBytes: 15 * 1024 * 1024, // Limite rígido de 15 Megabytes
         };
       },
       onUploadCompleted: async ({ blob, tokenPayload }) => {
