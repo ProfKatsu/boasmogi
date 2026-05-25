@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controle - Partilha Educa Mogi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen">
+
+    <nav class="bg-slate-900 border-b border-slate-800 sticky top-0 z-40 shadow-sm text-white">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">ÁREA RESTRITA</span>
+                <h1 class="text-xl font-bold tracking-tight">Gestão de Práticas</h1>
+            </div>
+            <a href="index.html" class="text-sm font-semibold text-slate-300 hover:text-white transition">&larr; Voltar ao site</a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-6 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
+                <h2 class="text-lg font-bold text-slate-800">Práticas Cadastradas</h2>
+                <button onclick="loadAdminMural()" class="text-sm text-indigo-600 font-semibold hover:underline">Atualizar Lista</button>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-600 text-xs uppercase tracking-wider border-b border-slate-200">
+                            <th class="p-4 font-bold">ID</th>
+                            <th class="p-4 font-bold">Autor & Escola</th>
+                            <th class="p-4 font-bold">Título</th>
+                            <th class="p-4 font-bold text-right">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody" class="text-sm text-slate-700 divide-y divide-slate-100">
+                        <tr><td colspan="4" class="p-4 text-center text-slate-500">Carregando dados...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        async function loadAdminMural() {
+            const tbody = document.getElementById('adminTableBody');
+            tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-500">Carregando dados...</td></tr>';
+            
+            try {
+                const res = await fetch('/api/practices');
+                if (!res.ok) throw new Error('Falha ao obter dados.');
+                const data = await res.json();
+                
+                tbody.innerHTML = '';
+                if(data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-500">Nenhuma prática cadastrada.</td></tr>';
+                    return;
+                }
+
+                data.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 transition";
+                    tr.innerHTML = `
+                        <td class="p-4 font-mono text-xs text-slate-500">#${item.id}</td>
+                        <td class="p-4">
+                            <div class="font-semibold text-slate-900">${item.autor}</div>
+                            <div class="text-xs text-slate-500">${item.escola}</div>
+                        </td>
+                        <td class="p-4 font-medium max-w-xs truncate" title="${item.titulo}">${item.titulo}</td>
+                        <td class="p-4 text-right">
+                            <button onclick="deletePractice(${item.id})" class="bg-red-100 text-red-700 hover:bg-red-600 hover:text-white text-xs font-bold py-2 px-4 rounded transition">Excluir</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Erro: ${err.message}</td></tr>`;
+            }
+        }
+
+        async function deletePractice(id) {
+            const senha = prompt("ACESSO RESTRITO: Digite a senha do administrador para confirmar a exclusão da prática #" + id + ":");
+            
+            if (!senha) return; // Cancela se o usuário fechar o prompt ou enviar vazio
+
+            try {
+                const res = await fetch('/api/practices', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id, senha: senha })
+                });
+
+                const result = await res.json();
+
+                if (!res.ok) {
+                    alert('Erro: ' + (result.error || 'Falha ao excluir.'));
+                } else {
+                    alert('Sucesso: ' + result.message);
+                    loadAdminMural(); // Recarrega a tabela após apagar
+                }
+            } catch (err) {
+                alert('Erro de comunicação com o servidor: ' + err.message);
+            }
+        }
+
+        // Carrega ao abrir a página
+        window.addEventListener('DOMContentLoaded', loadAdminMural);
+    </script>
+</body>
+</html>
