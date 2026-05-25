@@ -60,7 +60,8 @@
             <p class="text-slate-500 col-span-full text-center py-10">Carregando o acervo de práticas...</p>
         </div>
     </main>
-<footer class="bg-white border-t border-slate-200 mt-20 py-6 text-xs text-slate-400">
+
+    <footer class="bg-white border-t border-slate-200 mt-20 py-6 text-xs text-slate-400">
         <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3">
             <div class="flex flex-col sm:flex-row items-center gap-1 sm:gap-4 text-center sm:text-left">
                 <p>&copy; 2026 Partilha Educa Mogi. Todos os direitos reservados.</p>
@@ -72,13 +73,13 @@
             <p class="text-slate-400/70 text-[11px] italic">Desenvolvido por Katsusuke Yamazaki Filho 2026</p>
         </div>
     </footer>
+
     <script>
         let localDataCache = [];
         const muralGrid = document.getElementById('muralGrid');
         const filterEscola = document.getElementById('filterEscola');
         const filterComponente = document.getElementById('filterComponente');
 
-        // Carrega registros da API Serverless
         async function loadMural() {
             try {
                 const res = await fetch('/api/practices');
@@ -92,7 +93,6 @@
             }
         }
 
-        // Popula o select de escolas baseado de forma dinâmica nas práticas existentes
         function populateSchoolFilter(items) {
             const escolasUnicas = [...new Set(items.map(i => i.escola))].sort();
             escolasUnicas.forEach(esc => {
@@ -103,7 +103,6 @@
             });
         }
 
-       // Renderizador de cartões HTML com data e suporte a múltiplos arquivos
         function renderCards(items) {
             muralGrid.innerHTML = '';
             if (items.length === 0) {
@@ -115,14 +114,14 @@
                 const card = document.createElement('div');
                 card.className = 'bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between';
                 
-                // Formatação de Data e Hora
-                let dataFormatada = "";
-                if (item.aceito_em) {
-                    const dataObj = new Date(item.aceito_em);
+                // Formatação de Data garantindo leitura de qualquer coluna padrão do Postgres
+                let dataFormatada = "Data não registrada";
+                const dataBanco = item.created_at || item.data_registro || item.aceito_em;
+                if (dataBanco) {
+                    const dataObj = new Date(dataBanco);
                     dataFormatada = dataObj.toLocaleDateString('pt-BR') + ' às ' + dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                 }
 
-                // Renderização de 1 ou 2 botões de Anexo
                 let fileSection = '';
                 if (item.arquivo_url) {
                     const urls = item.arquivo_url.split(',');
@@ -169,7 +168,6 @@
             });
         }
 
-        // Eventos de Filtragem reativos
         function applyFilters() {
             const escValue = filterEscola.value;
             const compValue = filterComponente.value;
@@ -185,7 +183,6 @@
         filterEscola.addEventListener('change', applyFilters);
         filterComponente.addEventListener('change', applyFilters);
 
-        // Inicialização automática
         window.addEventListener('DOMContentLoaded', loadMural);
     </script>
 </body>
