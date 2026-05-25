@@ -103,7 +103,7 @@
             });
         }
 
-        // Renderizador de cartões HTML com manipulação pura de DOM
+       // Renderizador de cartões HTML com data e suporte a múltiplos arquivos
         function renderCards(items) {
             muralGrid.innerHTML = '';
             if (items.length === 0) {
@@ -115,18 +115,37 @@
                 const card = document.createElement('div');
                 card.className = 'bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between';
                 
+                // Formatação de Data e Hora
+                let dataFormatada = "";
+                if (item.aceito_em) {
+                    const dataObj = new Date(item.aceito_em);
+                    dataFormatada = dataObj.toLocaleDateString('pt-BR') + ' às ' + dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                }
+
+                // Renderização de 1 ou 2 botões de Anexo
                 let fileSection = '';
                 if (item.arquivo_url) {
+                    const urls = item.arquivo_url.split(',');
+                    const names = item.arquivo_nome ? item.arquivo_nome.split(',') : [];
+                    
+                    let buttonsHTML = '';
+                    urls.forEach((url, index) => {
+                        const nomeArquivo = names[index] ? names[index].trim() : `Anexo ${index + 1}`;
+                        buttonsHTML += `<a href="${url.trim()}" target="_blank" class="text-xs bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-bold py-1.5 px-3 rounded-md transition truncate max-w-full block text-center" title="${nomeArquivo}">Baixar: ${nomeArquivo} &darr;</a>`;
+                    });
+
                     fileSection = `
-                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                            <span class="text-xs text-slate-500 max-w-[70%] truncate font-medium">Anexo: ${item.arquivo_nome || 'Documento'}</span>
-                            <a href="${item.arquivo_url}" target="_blank" class="text-xs bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-bold py-1.5 px-3 rounded-md transition">Baixar Arquivo &darr;</a>
+                        <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col gap-2">
+                            <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Anexos:</span>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                ${buttonsHTML}
+                            </div>
                         </div>`;
                 }
 
                 let indiceBadge = '';
                 if (item.tem_impacto_indice && item.nome_indice) {
-                    indiceBadge = `<div class="mt-2 text-xs bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-md p-2 font-medium"><strong>Impacto em Índice:</strong> ${item.nome_indice}</div>`;
+                    indiceBadge = `<div class="mt-3 text-xs bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-md p-2 font-medium"><strong>Impacto em Índice:</strong> ${item.nome_indice}</div>`;
                 }
 
                 card.innerHTML = `
@@ -137,6 +156,7 @@
                         </div>
                         <h3 class="text-lg font-bold text-slate-950 mb-1 leading-snug">${item.titulo}</h3>
                         <p class="text-xs text-slate-400 mb-3 font-semibold uppercase">${item.escola}</p>
+                        <p class="text-[10px] text-slate-400 mb-3 flex items-center gap-1">🕒 Registrado em: ${dataFormatada}</p>
                         <p class="text-sm text-slate-600 whitespace-pre-line leading-relaxed line-clamp-4 hover:line-clamp-none transition-all duration-300 cursor-pointer">${item.descricao}</p>
                         ${indiceBadge}
                     </div>
