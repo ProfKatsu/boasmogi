@@ -1,6 +1,7 @@
 {
   "name": "boas-praticas-mogi",
   "version": "1.0.0",
+  "type": "module",
   "dependencies": {
     "@vercel/blob": "^0.23.3",
     "@vercel/postgres": "^0.8.0"
