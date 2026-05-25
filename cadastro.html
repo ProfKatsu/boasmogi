@@ -272,27 +272,96 @@
         
         const TERMO_TEXTO_LEGAL = `TERMO DE CONSENTIMENTO, COMPARTILHAMENTO E RESPONSABILIDADE LEGAL: Ao registrar esta boa prática pedagógica/gestora, o autor declara expressamente estar ciente e concordar com a coleta, processamento, armazenamento e ampla disponibilização pública do relato e de todos os seus arquivos anexos nesta plataforma para fins educacionais, formativos e de disseminação de práticas no âmbito das Unidades Escolares. O autor atesta a estrita originalidade e a autoria do relato apresentado. Adicionalmente, caso os materiais anexados (tais como fotos, áudios, planilhas ou vídeos) contenham a imagem, voz, dados pessoais ou propriedade intelectual de terceiros (incluindo estudantes, professores, servidores ou membros da comunidade escolar), o autor declara e assume total e exclusiva responsabilidade jurídica pela obtenção, guarda e arquivamento prévio das respectivas Autorizações de Uso de Imagem e Voz (Termos de Cessão de Direitos de Imagem), isentando integralmente esta plataforma e a administração pública de qualquer passivo legal relacionado aos direitos autorais e de imagem de terceiros, em estrita conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018) e o Estatuto da Criança e do Adolescente (ECA - Lei nº 8.069/1990).`;
 
-        practiceForm.addEventListener('submit', async (e) => {
+       practiceForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-            let uploadedFileUrl = null;
-            let uploadedFileName = null;
-
+            const files = Array.from(fileInput.files);
             const btnSubmit = document.getElementById('btnSubmit');
+            
             btnSubmit.disabled = true;
             btnSubmit.innerText = 'Processando registro...';
 
             try {
-                if (file) {
-                    if (file.size > 25 * 1024 * 1024) {
-                        alert('Erro: O arquivo selecionado ultrapassa o limite permitido de 25 MB.');
+                // Validação 1: Máximo de 2 arquivos
+                if (files.length > 2) {
+                    alert('Aviso: Você pode anexar no máximo 2 arquivos por registro.');
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerText = 'Salvar e Publicar Boa Prática';
+                    return;
+                }
+
+                // Validação 2: Limite de 15MB e Mensagem Personalizada
+                for (let file of files) {
+                    if (file.size > 15 * 1024 * 1024) {
+                        alert(`O arquivo "${file.name}" excede o limite de 15 MB para envio direto.\n\nPor favor, hospede este arquivo na nuvem (Google Drive, OneDrive, etc.) e compartilhe o link de acesso na descrição da sua Boa Prática.`);
                         btnSubmit.disabled = false;
                         btnSubmit.innerText = 'Salvar e Publicar Boa Prática';
                         return;
                     }
+                }
 
+                let uploadedUrls = [];
+                let uploadedNames = [];
+
+                // Upload em Loop
+                if (files.length > 0) {
+                    uploadProgressContainer.classList.remove('hidden');
+                    
+                    for (let i = 0; i < files.length; i++) {
+                        const file = files[i];
+                        uploadStatusText.innerText = `Transmitindo arquivo ${i + 1} de ${files.length}...`;
+                        uploadProgressBar.style.width = `${((i + 1) / files.length) * 100}%`;
+
+                        const blob = await upload(file.name, file, {
+                            access: 'public',
+                            handleUploadUrl: '/api/blob-upload'
+                        });
+                        
+                        uploadedUrls.push(blob.url);
+                        uploadedNames.push(file.name);
+                    }
+                    uploadProgressBar.style.width = '100%';
+                    uploadStatusText.innerText = 'Arquivos anexados com sucesso!';
+                }
+
+                const nomeIndiceForm = document.getElementById('nomeIndice');
+                
+                const formData = {
+                    escola: document.getElementById('escola').value,
+                    autor: document.getElementById('autor').value,
+                    funcao: document.getElementById('funcao').value,
+                    componente_curricular: document.getElementById('componente').value,
+                    tem_impacto_indice: document.querySelector('input[name="impacto"]:checked').value === 'SIM',
+                    nome_indice: nomeIndiceForm.value || null,
+                    titulo: document.getElementById('titulo').value,
+                    descricao: document.getElementById('descricao').value,
+                    // Une os links e nomes com vírgula para salvar no banco
+                    arquivo_url: uploadedUrls.length > 0 ? uploadedUrls.join(',') : null,
+                    arquivo_nome: uploadedNames.length > 0 ? uploadedNames.join(',') : null,
+                    termo_aceite: TERMO_TEXTO_LEGAL
+                };
+
+                uploadStatusText.innerText = 'Gravando informações no banco de dados...';
+                
+                const response = await fetch('/api/practices', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) throw new Error('Erro na gravação dos dados no servidor.');
+
+                alert('Excelente! A sua Boa Prática foi devidamente registrada e arquivada.');
+                window.location.href = 'mural.html';
+
+            } catch (err) {
+                console.error(err);
+                alert('Ocorreu uma falha sistêmica durante o processamento: ' + err.message);
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = 'Salvar e Publicar Boa Prática';
+            }
+        });
                     uploadProgressContainer.classList.remove('hidden');
                     uploadProgressBar.style.width = '40%';
                     uploadStatusText.innerText = 'Transmitindo arquivo anexado...';
