@@ -213,32 +213,24 @@
         </div>
     </main>
 
-    <script type="module">
-        // Importação nativa da SDK do Vercel Blob compilada via CDN seguro para rodar direto no Vanilla JS
-        import { upload } from 'https://esm.sh/@vercel/blob@0.23.3?bundle';
-
+    <script>
         const legalModal = document.getElementById('legalModal');
         const agreeTerms = document.getElementById('agreeTerms');
         const btnAcceptTerms = document.getElementById('btnAcceptTerms');
-        const practiceForm = document.getElementById('practiceForm');
         const indiceContainer = document.getElementById('indiceContainer');
         const nomeIndice = document.getElementById('nomeIndice');
-        const uploadProgressContainer = document.getElementById('uploadProgressContainer');
-        const uploadProgressBar = document.getElementById('uploadProgressBar');
-        const uploadStatusText = document.getElementById('uploadStatusText');
 
-        // Texto exato do termo guardado em memória para armazenamento sincronizado com o banco
-        const TERMO_TEXTO_LEGAL = `TERMO DE CONSENTIMENTO, COMPARTILHAMENTO E RESPONSABILIDADE LEGAL: Ao registrar esta boa prática pedagógica/gestora, o autor declara expressamente estar ciente e concordar com a coleta, processamento, armazenamento e ampla disponibilização pública...`;
-
-        // Controle do Modal Inicial
+        // Habilita o botão ao marcar o check
         agreeTerms.addEventListener('change', (e) => {
             btnAcceptTerms.disabled = !e.target.checked;
         });
+        
+        // Fecha o modal ao clicar no botão
         btnAcceptTerms.addEventListener('click', () => {
             legalModal.classList.add('hidden');
         });
 
-        // Toggle do campo condicional de Índices
+        // Mostra ou esconde o campo de Índice
         document.querySelectorAll('input[name="impacto"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
                 if (e.target.value === 'SIM') {
@@ -251,8 +243,18 @@
                 }
             });
         });
+    </script>
 
-        // Envio estruturado do formulário
+    <script type="module">
+        import { upload } from 'https://esm.sh/@vercel/blob/client?bundle';
+
+        const practiceForm = document.getElementById('practiceForm');
+        const uploadProgressContainer = document.getElementById('uploadProgressContainer');
+        const uploadProgressBar = document.getElementById('uploadProgressBar');
+        const uploadStatusText = document.getElementById('uploadStatusText');
+        
+        const TERMO_TEXTO_LEGAL = `TERMO DE CONSENTIMENTO, COMPARTILHAMENTO E RESPONSABILIDADE LEGAL: Ao registrar esta boa prática pedagógica/gestora, o autor declara expressamente estar ciente e concordar com a coleta, processamento, armazenamento e ampla disponibilização pública do relato e de todos os seus arquivos anexos nesta plataforma para fins educacionais, formativos e de disseminação de práticas no âmbito das Unidades Escolares. O autor atesta a estrita originalidade e a autoria do relato apresentado. Adicionalmente, caso os materiais anexados (tais como fotos, áudios, planilhas ou vídeos) contenham a imagem, voz, dados pessoais ou propriedade intelectual de terceiros (incluindo estudantes, professores, servidores ou membros da comunidade escolar), o autor declara e assume total e exclusiva responsabilidade jurídica pela obtenção, guarda e arquivamento prévio das respectivas Autorizações de Uso de Imagem e Voz (Termos de Cessão de Direitos de Imagem), isentando integralmente esta plataforma e a administração pública de qualquer passivo legal relacionado aos direitos autorais e de imagem de terceiros, em estrita conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018) e o Estatuto da Criança e do Adolescente (ECA - Lei nº 8.069/1990).`;
+
         practiceForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -266,10 +268,9 @@
             btnSubmit.innerText = 'Processando registro...';
 
             try {
-                // 1. Se houver arquivo selecionado, faz a validação e o upload assíncrono direto ao Vercel Blob
                 if (file) {
                     if (file.size > 25 * 1024 * 1024) {
-                        alert('Erro: O arquivo selecionado ultrapassa o limite permitido de 25 megabytes (MB).');
+                        alert('Erro: O arquivo selecionado ultrapassa o limite permitido de 25 MB.');
                         btnSubmit.disabled = false;
                         btnSubmit.innerText = 'Salvar e Publicar Boa Prática';
                         return;
@@ -277,9 +278,8 @@
 
                     uploadProgressContainer.classList.remove('hidden');
                     uploadProgressBar.style.width = '40%';
-                    uploadStatusText.innerText = 'Autenticando e transmitindo arquivo anexado...';
+                    uploadStatusText.innerText = 'Transmitindo arquivo anexado...';
 
-                    // O método nativo se conecta com a Serverless API '/api/blob-upload' para autenticação segura
                     const blob = await upload(file.name, file, {
                         access: 'public',
                         handleUploadUrl: '/api/blob-upload'
@@ -292,23 +292,24 @@
                     uploadStatusText.innerText = 'Arquivo anexado com sucesso!';
                 }
 
-                // 2. Coleta de dados estruturada do formulário do frontend
+                const nomeIndiceForm = document.getElementById('nomeIndice');
+                
                 const formData = {
                     escola: document.getElementById('escola').value,
                     autor: document.getElementById('autor').value,
                     funcao: document.getElementById('funcao').value,
                     componente_curricular: document.getElementById('componente').value,
                     tem_impacto_indice: document.querySelector('input[name="impacto"]:checked').value === 'SIM',
-                    nome_indice: nomeIndice.value || null,
+                    nome_indice: nomeIndiceForm.value || null,
                     titulo: document.getElementById('titulo').value,
                     descricao: document.getElementById('descricao').value,
                     arquivo_url: uploadedFileUrl,
-                    arquivo_name: uploadedFileName,
+                    arquivo_nome: uploadedFileName,
                     termo_aceite: TERMO_TEXTO_LEGAL
                 };
 
-                // 3. Persistência de dados enviando o payload completo via POST ao banco de dados Postgres
                 uploadStatusText.innerText = 'Gravando informações no banco de dados...';
+                
                 const response = await fetch('/api/practices', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
