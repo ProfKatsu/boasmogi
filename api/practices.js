@@ -62,9 +62,12 @@ export default async function handler(request, response) {
       // 2. Apaga o registro de texto do banco de dados Postgres
       await sql`DELETE FROM boas_praticas WHERE id = ${id}`;
 
-      // 3. Se havia um arquivo anexado, apaga do Blob para liberar seu limite de 1GB
+     // 3. Se havia arquivo(s) anexado(s), apaga todos do Blob para liberar seu limite
       if (arquivoUrl) {
-        await del(arquivoUrl);
+        const urls = arquivoUrl.split(',');
+        for (let url of urls) {
+          if (url.trim()) await del(url.trim());
+        }
       }
 
       return response.status(200).json({ success: true, message: 'Prática e arquivos excluídos com sucesso!' });
