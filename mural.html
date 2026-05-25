@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mural - Banco de Boas Práticas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen">
+
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-indigo-900 tracking-tight">Mural de Boas Práticas</h1>
+            <a href="index.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg text-sm transition shadow-sm">+ Registrar Prática</a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Filtrar por Unidade Escolar</label>
+                <select id="filterEscola" class="w-full rounded-lg border border-slate-300 p-2 text-sm bg-slate-50 focus:bg-white outline-none">
+                    <option value="">Todas as Escolas</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Filtrar por Componente Curricular</label>
+                <select id="filterComponente" class="w-full rounded-lg border border-slate-300 p-2 text-sm bg-slate-50 focus:bg-white outline-none">
+                    <option value="">Todos os Componentes</option>
+                    <option value="Não se aplica">Não se aplica (Gestão / Outros)</option>
+                    <option value="Arte">Arte</option>
+                    <option value="Biologia">Biologia</option>
+                    <option value="Ciências">Ciências</option>
+                    <option value="Educação Física">Educação Física</option>
+                    <option value="Eletivas">Eletivas</option>
+                    <option value="Filosofia">Filosofia</option>
+                    <option value="Física">Física</option>
+                    <option value="Geografia">Geografia</option>
+                    <option value="História">História</option>
+                    <option value="Itinerários Formativos / Trilhas">Itinerários Formativos / Trilhas</option>
+                    <option value="Língua Espanhola">Língua Espanhola</option>
+                    <option value="Língua Inglesa">Língua Inglesa</option>
+                    <option value="Língua Portuguesa">Língua Portuguesa</option>
+                    <option value="Matemática">Matemática</option>
+                    <option value="Projeto de Vida">Projeto de Vida</option>
+                    <option value="Química">Química</option>
+                    <option value="Sociologia">Sociologia</option>
+                    <option value="Tecnologia e Inovação">Tecnologia e Inovação</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="muralGrid" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <p class="text-slate-500 col-span-full text-center py-10">Carregando o acervo de práticas...</p>
+        </div>
+    </main>
+
+    <script>
+        let localDataCache = [];
+        const muralGrid = document.getElementById('muralGrid');
+        const filterEscola = document.getElementById('filterEscola');
+        const filterComponente = document.getElementById('filterComponente');
+
+        // Carrega registros da API Serverless
+        async function loadMural() {
+            try {
+                const res = await fetch('/api/practices');
+                if (!res.ok) throw new Error('Falha ao obter dados.');
+                localDataCache = await res.json();
+                
+                populateSchoolFilter(localDataCache);
+                renderCards(localDataCache);
+            } catch (err) {
+                muralGrid.innerHTML = `<p class="text-red-500 col-span-full text-center py-10">Erro ao processar catálogo: ${err.message}</p>`;
+            }
+        }
+
+        // Popula o select de escolas baseado de forma dinâmica nas práticas existentes
+        function populateSchoolFilter(items) {
+            const escolasUnicas = [...new Set(items.map(i => i.escola))].sort();
+            escolasUnicas.forEach(esc => {
+                const opt = document.createElement('option');
+                opt.value = esc;
+                opt.innerText = esc;
+                filterEscola.appendChild(opt);
+            });
+        }
+
+        // Renderizador de cartões HTML com manipulação pura de DOM
+        function renderCards(items) {
+            muralGrid.innerHTML = '';
+            if (items.length === 0) {
+                muralGrid.innerHTML = '<p class="text-slate-500 col-span-full text-center py-10">Nenhuma boa prática encontrada para os filtros selecionados.</p>';
+                return;
+            }
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between';
+                
+                let fileSection = '';
+                if (item.arquivo_url) {
+                    fileSection = `
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-xs text-slate-500 max-w-[70%] truncate font-medium">Anexo: ${item.arquivo_nome || 'Documento'}</span>
+                            <a href="${item.arquivo_url}" target="_blank" class="text-xs bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-bold py-1.5 px-3 rounded-md transition">Baixar Arquivo &darr;</a>
+                        </div>`;
+                }
+
+                let indiceBadge = '';
+                if (item.tem_impacto_indice && item.nome_indice) {
+                    indiceBadge = `<div class="mt-2 text-xs bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-md p-2 font-medium"><strong>Impacto em Índice:</strong> ${item.nome_indice}</div>`;
+                }
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex flex-wrap gap-2 mb-2">
+                            <span class="text-[10px] uppercase font-bold tracking-wider bg-slate-100 text-slate-600 px-2 py-0.5 rounded">${item.funcao}</span>
+                            <span class="text-[10px] uppercase font-bold tracking-wider bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded">${item.componente_curricular}</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-950 mb-1 leading-snug">${item.titulo}</h3>
+                        <p class="text-xs text-slate-400 mb-3 font-semibold uppercase">${item.escola}</p>
+                        <p class="text-sm text-slate-600 whitespace-pre-line leading-relaxed line-clamp-4 hover:line-clamp-none transition-all duration-300 cursor-pointer">${item.descricao}</p>
+                        ${indiceBadge}
+                    </div>
+                    <div class="mt-4">
+                        <div class="text-xs text-slate-500 font-medium">Autor: <span class="text-slate-700 font-semibold">${item.autor}</span></div>
+                        ${fileSection}
+                    </div>
+                `;
+                muralGrid.appendChild(card);
+            });
+        }
+
+        // Eventos de Filtragem reativos
+        function applyFilters() {
+            const escValue = filterEscola.value;
+            const compValue = filterComponente.value;
+
+            const filtered = localDataCache.filter(item => {
+                const matchEscola = !escValue || item.escola === escValue;
+                const matchComp = !compValue || item.componente_curricular === compValue;
+                return matchEscola && matchComp;
+            });
+            renderCards(filtered);
+        }
+
+        filterEscola.addEventListener('change', applyFilters);
+        filterComponente.addEventListener('change', applyFilters);
+
+        // Inicialização automática
+        window.addEventListener('DOMContentLoaded', loadMural);
+    </script>
+</body>
+</html>
