@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - Compartilhamento de Boas Práticas</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen">
 
@@ -24,10 +24,10 @@
 
             <div class="flex flex-col gap-4">
                 <label class="flex items-start gap-3 cursor-pointer">
-                    <input type="checkbox" id="agreeTerms" onchange="document.getElementById('btnAcceptTerms').disabled = !this.checked;" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500">
+                    <input type="checkbox" id="agreeTerms" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500" onchange="document.getElementById('btnAcceptTerms').disabled = !this.checked;">
                     <span class="text-sm text-slate-700 font-medium">Li o termo acima e declaro que aceito as condições de compartilhamento e responsabilidade legal.</span>
                 </label>
-                <button type="button" id="btnAcceptTerms" disabled onclick="document.getElementById('legalModal').style.display = 'none';" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-4 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-indigo-100">
+                <button type="button" id="btnAcceptTerms" disabled class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-4 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-indigo-100" onclick="document.getElementById('legalModal').style.display = 'none';">
                     Acessar e Registrar Boa Prática
                 </button>
             </div>
@@ -37,4 +37,315 @@
     <nav class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
         <div class="max-w-3xl mx-auto px-4 py-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <a href="index.html" class="flex items-center gap-3.5 hover:opacity-80 transition">
-                <img src="logo.png
+                <img src="logo.png" alt="Logotipo Regional" class="h-12 w-auto object-contain">
+                <div>
+                    <h1 class="text-xl font-bold text-indigo-900 tracking-tight">Partilha Educa Mogi</h1>
+                    <p class="text-xs text-slate-500 font-medium">Unidade Regional de Ensino de Mogi das Cruzes</p>
+                </div>
+            </a>
+            <a href="mural.html" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition py-2 px-3 rounded-lg hover:bg-indigo-50">Ver Mural de Práticas &rarr;</a>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-4 py-10">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-10">
+            <div class="border-b border-slate-100 pb-5 mb-6">
+                <h2 class="text-2xl font-bold text-slate-900">Registrar Nova Prática</h2>
+                <p class="text-slate-500 text-sm mt-1">Preencha todos os campos para compartilhar a sua experiência com a rede.</p>
+            </div>
+
+            <form id="practiceForm" class="space-y-6">
+                <div>
+                    <label for="escola" class="block text-sm font-semibold text-slate-700 mb-2">Unidade Escolar *</label>
+                    <select id="escola" required class="w-full rounded-lg border border-slate-300 px-3 py-2.5 bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-slate-700 text-sm">
+                        <option value="">Selecione a Escola...</option>
+                        <option value="ADELAIDE MARIA DE BARROS PROFESSORA">ADELAIDE MARIA DE BARROS PROFESSORA</option>
+                        <option value="ADHEMAR BOLINA PROFESSOR">ADHEMAR BOLINA PROFESSOR</option>
+                        <option value="ALCIDES CELESTINO FILHO VEREADOR">ALCIDES CELESTINO FILHO VEREADOR</option>
+                        <option value="ALZIRA FERNANDES SCUNGISQUI">ALZIRA FERNANDES SCUNGISQUI</option>
+                        <option value="AMERICO SUGAI">AMERICO SUGAI</option>
+                        <option value="ANGELICA DE JESUS FERREIRA">ANGELICA DE JESUS FERREIRA</option>
+                        <option value="ANTONIO MARMORA FILHO MAESTRO">ANTONIO MARMORA FILHO MAESTRO</option>
+                        <option value="ANTONIO OLEGARIO DOS SANTOS CARDOSO">ANTONIO OLEGARIO DOS SANTOS CARDOSO</option>
+                        <option value="APRIGIO DE OLIVEIRA">APRIGIO DE OLIVEIRA</option>
+                        <option value="ARISTOTELES DE ANDRADE PROFESSOR">ARISTOTELES DE ANDRADE PROFESSOR</option>
+                        <option value="ARLINDO AQUINO DE OLIVEIRA DOUTOR">ARLINDO AQUINO DE OLIVEIRA DOUTOR</option>
+                        <option value="BENEDITO BORGES VIEIRA PROFESSOR">BENEDITO BORGES VIEIRA PROFESSOR</option>
+                        <option value="BENEDITO DE SOUZA LIMA">BENEDITO DE SOUZA LIMA</option>
+                        <option value="BERNARDO MURPHY PADRE">BERNARDO MURPHY PADRE</option>
+                        <option value="BRANCA BAUMANN DO AMARAL PROFESSORA">BRANCA BAUMANN DO AMARAL PROFESSORA</option>
+                        <option value="CAMILO FAUSTINO DE MELLO PROFESSOR">CAMILO FAUSTINO DE MELLO PROFESSOR</option>
+                        <option value="CEEJA DE MOGI DAS CRUZES">CEEJA DE MOGI DAS CRUZES</option>
+                        <option value="CID BOUCAULT PROFESSOR">CID BOUCAULT PROFESSOR</option>
+                        <option value="CLAUDIO ABRAHAO PROFESSOR">CLAUDIO ABRAHAO PROFESSOR</option>
+                        <option value="DAGOBERTO JOSE MACHADO">DAGOBERTO JOSE MACHADO</option>
+                        <option value="DEODATO WERTHEIMER DOUTOR">DEODATO WERTHEIMER DOUTOR</option>
+                        <option value="DORA PERETTI DE OLIVEIRA PROFESSORA">DORA PERETTI DE OLIVEIRA PROFESSORA</option>
+                        <option value="ELISIARIO PINTO DE MORAIS VEREADOR">ELISIARIO PINTO DE MORAIS VEREADOR</option>
+                        <option value="ENEDINA GOMES DE FREITAS PROFESSORA">ENEDINA GOMES DE FREITAS PROFESSORA</option>
+                        <option value="EURYCLIDES DE JESUS ZERBINI">EURYCLIDES DE JESUS ZERBINI</option>
+                        <option value="FIRMINO LADEIRA PROFESSOR">FIRMINO LADEIRA PROFESSOR</option>
+                        <option value="FRANCISCO DE SOUZA MELLO PROFESSOR">FRANCISCO DE SOUZA MELLO PROFESSOR</option>
+                        <option value="FRANCISCO FERREIRA LOPES">FRANCISCO FERREIRA LOPES</option>
+                        <option value="GABRIEL PEREIRA">GABRIEL PEREIRA</option>
+                        <option value="GALDINO PINHEIRO FRANCO">GALDINO PINHEIRO FRANCO</option>
+                        <option value="HELENA URBANO NAGIB PROFESSORA">HELENA URBANO NAGIB PROFESSORA</option>
+                        <option value="HERACLIDES BATALHA DE CAMARGO DES">HERACLIDES BATALHA DE CAMARGO DES</option>
+                        <option value="ILSON GOMES PROFESSOR">ILSON GOMES PROFESSOR</option>
+                        <option value="IRACEMA BRASIL DE SIQUEIRA PROFESSORA">IRACEMA BRASIL DE SIQUEIRA PROFESSORA</option>
+                        <option value="IRENE CAPORALI DE SOUZA PROFESSORA">IRENE CAPORALI DE SOUZA PROFESSORA</option>
+                        <option value="ISAAC GRINBERG HISTORIADOR">ISAAC GRINBERG HISTORIADOR</option>
+                        <option value="ISABEL FERREIRA DA SILVA PROFESSORA BELINHA">ISABEL FERREIRA DA SILVA PROFESSORA BELINHA</option>
+                        <option value="JOAO CARDOSO DOS SANTOS PROFESSOR">JOAO CARDOSO DOS SANTOS PROFESSOR</option>
+                        <option value="JOSE AYUMAR GONCALVES DE MIRANDA PROFESSOR">JOSE AYUMAR GONCALVES DE MIRANDA PROFESSOR</option>
+                        <option value="JOSE CARLOS PRESTES PROFESSOR">JOSE CARLOS PRESTES PROFESSOR</option>
+                        <option value="JOSE RIBEIRO GUIMARAES">JOSE RIBEIRO GUIMARAES</option>
+                        <option value="JOSE SANCHES JOSENDE PROFESSOR">JOSE SANCHES JOSENDE PROFESSOR</option>
+                        <option value="JOSEPHINA NAJAR HERNANDEZ PROFESSORA">JOSEPHINA NAJAR HERNANDEZ PROFESSORA</option>
+                        <option value="JOVITA FRANCO AROUCHE">JOVITA FRANCO AROUCHE</option>
+                        <option value="KOHEIJI ADACHI">KOHEIJI ADACHI</option>
+                        <option value="LAURINDA CARDOSO MELLO FREIRE PROFESSORA">LAURINDA CARDOSO MELLO FREIRE PROFESSORA</option>
+                        <option value="LEONOR DE OLIVEIRA MELLO">LEONOR DE OLIVEIRA MELLO</option>
+                        <option value="LUCINDA BASTOS PROFESSORA">LUCINDA BASTOS PROFESSORA</option>
+                        <option value="MARIA ISABEL DOS SANTOS MELLO PROFESSORA">MARIA ISABEL DOS SANTOS MELLO PROFESSORA</option>
+                        <option value="MARIA RODRIGUES GONCALVES PROFESSORA">MARIA RODRIGUES GONCALVES PROFESSORA</option>
+                        <option value="NARCISO YAGUE GUIMARAES VEREADOR">NARCISO YAGUE GUIMARAES VEREADOR</option>
+                        <option value="OLGA CHAKUR FARAH PROFESSORA">OLGA CHAKUR FARAH PROFESSORA</option>
+                        <option value="OSMAR TEIXEIRA SERRA REV PROFESSOR">OSMAR TEIXEIRA SERRA REV PROFESSOR</option>
+                        <option value="PAULO DE OLIVEIRA MELLO PROFESSOR">PAULO DE OLIVEIRA MELLO PROFESSOR</option>
+                        <option value="PAULO FERRARI MASSARO PROFESSOR">PAULO FERRARI MASSARO PROFESSOR</option>
+                        <option value="PAULO TAPAJOS">PAULO TAPAJOS</option>
+                        <option value="PEDRO MALOZZE">PEDRO MALOZZE</option>
+                        <option value="ROSA MARIA DE SOUZA PROFESSORA">ROSA MARIA DE SOUZA PROFESSORA</option>
+                        <option value="RUBENS MERCADANTE DE LIMA PROFESSOR DOUTOR">RUBENS MERCADANTE DE LIMA PROFESSOR DOUTOR</option>
+                        <option value="SEBASTIAO DE CASTRO PROFESSOR">SEBASTIAO DE CASTRO PROFESSOR</option>
+                        <option value="SENTARO TAKAOKA DOUTOR">SENTARO TAKAOKA DOUTOR</option>
+                        <option value="SUELI OLIVEIRA SILVA MARTINS PROFESSORA">SUELI OLIVEIRA SILVA MARTINS PROFESSORA</option>
+                        <option value="SYLVIA MAFRA MACHADO PROFESSORA">SYLVIA MAFRA MACHADO PROFESSORA</option>
+                        <option value="TADAO SAKAI VEREADOR">TADAO SAKAI VEREADOR</option>
+                        <option value="THIMOTEO VAN DEN BROECK FREI">THIMOTEO VAN DEN BROECK FREI</option>
+                        <option value="VANIA APARECIDA CASSARA PROFESSORA">VANIA APARECIDA CASSARA PROFESSORA</option>
+                        <option value="WASHINGTON LUIZ DOUTOR">WASHINGTON LUIZ DOUTOR</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="autor" class="block text-sm font-semibold text-slate-700 mb-2">Nome Completo do Autor *</label>
+                        <input type="text" id="autor" required class="w-full rounded-lg border border-slate-300 px-3 py-2.5 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-slate-700 text-sm">
+                    </div>
+                    <div>
+                        <label for="funcao" class="block text-sm font-semibold text-slate-700 mb-2">Função *</label>
+                        <select id="funcao" required class="w-full rounded-lg border border-slate-300 px-3 py-2.5 bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-slate-700 text-sm">
+                            <option value="">Selecione...</option>
+                            <option value="Diretor">Diretor</option>
+                            <option value="Vice-diretor">Vice-diretor</option>
+                            <option value="Coordenador">Coordenador</option>
+                            <option value="Professor">Professor</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="componente" class="block text-sm font-semibold text-slate-700 mb-2">Componente Curricular / Área *</label>
+                    <select id="componente" required class="w-full rounded-lg border border-slate-300 px-3 py-2.5 bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-slate-700 text-sm">
+                        <option value="">Selecione o Componente...</option>
+                        <option value="Não se aplica">Não se aplica (Gestão / Outros)</option>
+                        <option value="Arte">Arte</option>
+                        <option value="Biologia">Biologia</option>
+                        <option value="Ciências">Ciências</option>
+                        <option value="Educação Física">Educação Física</option>
+                        <option value="Eletivas">Eletivas (Inova Educação)</option>
+                        <option value="Filosofia">Filosofia</option>
+                        <option value="Física">Física</option>
+                        <option value="Geografia">Geografia</option>
+                        <option value="História">História</option>
+                        <option value="Itinerários Formativos / Trilhas">Itinerários Formativos / Trilhas de Aprofundamento</option>
+                        <option value="Língua Espanhola">Língua Espanhola</option>
+                        <option value="Língua Inglesa">Língua Inglesa</option>
+                        <option value="Língua Portuguesa">Língua Portuguesa</option>
+                        <option value="Matemática">Matemática</option>
+                        <option value="Projeto de Vida">Projeto de Vida (Inova Educação)</option>
+                        <option value="Química">Química</option>
+                        <option value="Sociologia">Sociologia</option>
+                        <option value="Tecnologia e Inovação">Tecnologia e Inovação (Inova Educação)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Tem impacto em algum índice? (Ex: Prova Paulista, Frequência, Plataformas, IDEB, IDESP) *</label>
+                    <div class="flex gap-4 mb-3">
+                        <label class="flex items-center gap-2 cursor-pointer text-sm">
+                            <input type="radio" name="impacto" value="NAO" checked class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"> NÃO
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer text-sm">
+                            <input type="radio" name="impacto" value="SIM" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"> SIM
+                        </label>
+                    </div>
+                    <div id="indiceContainer" class="hidden transition-all duration-300">
+                        <label for="nomeIndice" class="block text-xs font-semibold text-slate-600 mb-1">Especifique qual índice e o impacto gerado:</label>
+                        <input type="text" id="nomeIndice" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-700 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label for="titulo" class="block text-sm font-semibold text-slate-700 mb-2">Título da Boa Prática *</label>
+                        <input type="text" id="titulo" required class="w-full rounded-lg border border-slate-300 px-3 py-2.5 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-slate-700 text-sm" placeholder="Ex: Monitoria Compartilhada de Matemática nos Anos Finais">
+                    </div>
+                    <div>
+                        <label for="descricao" class="block text-sm font-semibold text-slate-700 mb-2">Descrição Detalhada *</label>
+                        <textarea id="descricao" required rows="6" class="w-full rounded-lg border border-slate-300 px-3 py-2.5 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-slate-700 text-sm leading-relaxed" placeholder="Descreva os objetivos, a metodologia aplicada, os recursos e os resultados alcançados..."></textarea>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-lg border border-dashed border-slate-300">
+                    <label for="fileInput" class="block text-sm font-semibold text-slate-700 mb-1">Anexar Documento / Mídia</label>
+                    <p class="text-xs text-slate-500 mb-3">Formatos aceitos: PDF, Imagens, Arquivos de Texto, Planilhas ou Vídeos. <br><strong class="text-indigo-600">Limite: Até 2 arquivos de no máximo 15 MB cada.</strong></p>
+                    <input type="file" id="fileInput" multiple accept=".pdf,image/*,text/plain,.csv,.xls,.xlsx,video/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                    
+                    <div id="uploadProgressContainer" class="hidden mt-3 space-y-1">
+                        <div class="w-full bg-slate-200 rounded-full h-2">
+                            <div id="uploadProgressBar" class="bg-indigo-600 h-2 rounded-full w-0 transition-all duration-150"></div>
+                        </div>
+                        <p id="uploadStatusText" class="text-xs text-slate-600 font-medium">Enviando arquivo(s)...</p>
+                    </div>
+                </div>
+
+                <button type="submit" id="btnSubmit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition shadow-md hover:shadow-lg flex justify-center items-center gap-2 text-sm">
+                    Salvar e Publicar Boa Prática
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-16 py-6 text-xs text-slate-400">
+        <div class="max-w-3xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex flex-col sm:flex-row items-center gap-1 sm:gap-4 text-center sm:text-left">
+                <p>&copy; 2026 Partilha Educa Mogi. Todos os direitos reservados.</p>
+                <div class="flex gap-3">
+                    <a href="termos.html" class="hover:text-slate-600 transition">Termos de Uso</a>
+                    <a href="privacidade.html" class="hover:text-slate-600 transition">Políticas de Privacidade</a>
+                </div>
+            </div>
+            <p class="text-slate-400/70 text-[11px] italic">Desenvolvido por Katsusuke Yamazaki Filho 2026</p>
+        </div>
+    </footer>
+
+    <script>
+        const indiceContainer = document.getElementById('indiceContainer');
+        const nomeIndice = document.getElementById('nomeIndice');
+
+        document.querySelectorAll('input[name="impacto"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.value === 'SIM') {
+                    indiceContainer.classList.remove('hidden');
+                    nomeIndice.required = true;
+                } else {
+                    indiceContainer.classList.add('hidden');
+                    nomeIndice.required = false;
+                    nomeIndice.value = '';
+                }
+            });
+        });
+    </script>
+
+    <script type="module">
+        import { upload } from '[https://esm.sh/@vercel/blob/client?bundle](https://esm.sh/@vercel/blob/client?bundle)';
+
+        const practiceForm = document.getElementById('practiceForm');
+        const uploadProgressContainer = document.getElementById('uploadProgressContainer');
+        const uploadProgressBar = document.getElementById('uploadProgressBar');
+        const uploadStatusText = document.getElementById('uploadStatusText');
+        
+        const TERMO_TEXTO_LEGAL = `TERMO DE CONSENTIMENTO, COMPARTILHAMENTO E RESPONSABILIDADE LEGAL: Ao registrar esta boa prática pedagógica/gestora, o autor declara expressamente estar ciente e concordar com a coleta, processamento, armazenamento e ampla disponibilização pública do relato e de todos os seus arquivos anexos nesta plataforma para fins educacionais, formativos e de disseminação de práticas no âmbito das Unidades Escolares. O autor atesta a estrita originalidade e a autoria do relato apresentado. Adicionalmente, caso os materiais anexados (tais como fotos, áudios, planilhas ou vídeos) contenham a imagem, voz, dados pessoais ou propriedade intelectual de terceiros (incluindo estudantes, professores, servidores ou membros da comunidade escolar), o autor declara e assume total e exclusiva responsabilidade jurídica pela obtenção, guarda e arquivamento prévio das respectivas Autorizações de Uso de Imagem e Voz (Termos de Cessão de Direitos de Imagem), isentando integralmente esta plataforma e a administração pública de qualquer passivo legal relacionado aos direitos autorais e de imagem de terceiros, em estrita conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018) e o Estatuto da Criança e do Adolescente (ECA - Lei nº 8.069/1990).`;
+
+        practiceForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('fileInput');
+            const files = Array.from(fileInput.files);
+            const btnSubmit = document.getElementById('btnSubmit');
+            
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = 'Processando registro...';
+
+            try {
+                if (files.length > 2) {
+                    alert('Aviso: Você pode anexar no máximo 2 arquivos por registro.');
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerText = 'Salvar e Publicar Boa Prática';
+                    return;
+                }
+
+                for (let file of files) {
+                    if (file.size > 15 * 1024 * 1024) {
+                        alert(`O arquivo "${file.name}" excede o limite de 15 MB para envio direto.\n\nPor favor, hospede este arquivo na nuvem (Google Drive, OneDrive, etc.) e compartilhe o link de acesso na descrição da sua Boa Prática.`);
+                        btnSubmit.disabled = false;
+                        btnSubmit.innerText = 'Salvar e Publicar Boa Prática';
+                        return;
+                    }
+                }
+
+                let uploadedUrls = [];
+                let uploadedNames = [];
+
+                if (files.length > 0) {
+                    uploadProgressContainer.classList.remove('hidden');
+                    
+                    for (let i = 0; i < files.length; i++) {
+                        const file = files[i];
+                        uploadStatusText.innerText = `Transmitindo arquivo ${i + 1} de ${files.length}...`;
+                        uploadProgressBar.style.width = `${((i + 1) / files.length) * 100}%`;
+
+                        const blob = await upload(file.name, file, {
+                            access: 'public',
+                            handleUploadUrl: '/api/blob-upload'
+                        });
+                        
+                        uploadedUrls.push(blob.url);
+                        uploadedNames.push(file.name);
+                    }
+                    uploadProgressBar.style.width = '100%';
+                    uploadStatusText.innerText = 'Arquivos anexados com sucesso!';
+                }
+
+                const nomeIndiceForm = document.getElementById('nomeIndice');
+                
+                const formData = {
+                    escola: document.getElementById('escola').value,
+                    autor: document.getElementById('autor').value,
+                    funcao: document.getElementById('funcao').value,
+                    componente_curricular: document.getElementById('componente').value,
+                    tem_impacto_indice: document.querySelector('input[name="impacto"]:checked').value === 'SIM',
+                    nome_indice: nomeIndiceForm.value || null,
+                    titulo: document.getElementById('titulo').value,
+                    descricao: document.getElementById('descricao').value,
+                    arquivo_url: uploadedUrls.length > 0 ? uploadedUrls.join(',') : null,
+                    arquivo_nome: uploadedNames.length > 0 ? uploadedNames.join(',') : null,
+                    termo_aceite: TERMO_TEXTO_LEGAL
+                };
+
+                uploadStatusText.innerText = 'Gravando informações no banco de dados...';
+                
+                const response = await fetch('/api/practices', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) throw new Error('Erro na gravação dos dados no servidor.');
+
+                alert('Excelente! A sua Boa Prática foi devidamente registrada e arquivada.');
+                window.location.href = 'mural.html';
+
+            } catch (err) {
+                console.error(err);
+                alert('Ocorreu uma falha sistêmica durante o processamento: ' + err.message);
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = 'Salvar e Publicar Boa Prática';
+            }
+        });
+    </script>
+</body>
+</html>
